@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LoanIQ — Smart Loan Approval System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar">
+  <a class="brand" href="/">Loan<span>IQ</span></a>
+  <a href="/">Home</a>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/apply" class="nav-apply">Apply Now →</a>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Get Your Loan Approved<br/>Faster & Smarter</h1>
+  <p>Submit your loan application online and get an instant decision based on your financial profile. No waiting days — know your status right away.</p>
+  <a href="/apply" class="btn-hero">Start Your Application →</a>
+</div>
+
+<!-- Stats -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">1,284</div><div class="stat-label">Applications Processed</div></div>
+    <div><div class="stat-num">68%</div><div class="stat-label">Approval Rate</div></div>
+    <div><div class="stat-num">< 3s</div><div class="stat-label">Instant Decision</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-label">Online & Paperless</div></div>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="container">
+  <div class="section-head">
+    <h2>Why Choose LoanIQ?</h2>
+    <p>A simple, fast, and transparent loan application system</p>
+  </div>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">⚡</div>
+      <h4>Instant Decision</h4>
+      <p>No waiting. Submit your application and get an immediate Approved, Rejected, or Under Review status.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📊</div>
+      <h4>Transparent Process</h4>
+      <p>We explain exactly why your loan was approved or rejected. Know your DTI ratio and what affects your decision.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔒</div>
+      <h4>Secure & Safe</h4>
+      <p>Your personal and financial data is stored securely in our database and never shared with third parties.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📱</div>
+      <h4>100% Online</h4>
+      <p>No paperwork, no branch visits. Apply from your phone or computer in just 2 minutes.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🏦</div>
+      <h4>Multiple Purposes</h4>
+      <p>Home loans, vehicle loans, business loans, education loans, and personal loans — all in one place.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📋</div>
+      <h4>Track Your Application</h4>
+      <p>Every application gets a unique ID. You can view your full application details and decision at any time.</p>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="card" style="margin-top: 40px;">
+    <h3>How It Works — 3 Simple Steps</h3>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; padding: 10px 0;">
+      <div style="text-align: center; padding: 16px;">
+        <div style="width: 50px; height: 50px; background: #ebf8ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 22px; font-weight: 700; color: #2b6cb0;">1</div>
+        <h4 style="margin-bottom: 6px;">Fill the Form</h4>
+        <p style="font-size: 13px; color: #718096;">Enter your name, income, credit score, and loan details. Takes about 2 minutes.</p>
+      </div>
+      <div style="text-align: center; padding: 16px;">
+        <div style="width: 50px; height: 50px; background: #ebf8ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 22px; font-weight: 700; color: #2b6cb0;">2</div>
+        <h4 style="margin-bottom: 6px;">System Checks</h4>
+        <p style="font-size: 13px; color: #718096;">Our system checks your credit score, debt-to-income ratio, and loan amount automatically.</p>
+      </div>
+      <div style="text-align: center; padding: 16px;">
+        <div style="width: 50px; height: 50px; background: #c6f6d5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 22px; font-weight: 700; color: #276749;">3</div>
+        <h4 style="margin-bottom: 6px;">Get Decision</h4>
+        <p style="font-size: 13px; color: #718096;">Instantly see if your loan is Approved, Under Review, or Rejected — with a full explanation.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Decision criteria -->
+  <div class="card">
+    <h3>Loan Approval Criteria</h3>
+    <p style="font-size: 14px; color: #4a5568; margin-bottom: 16px;">Our system evaluates your application based on these key factors:</p>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <div style="background: #f0fff4; border-radius: 8px; padding: 14px; border-left: 4px solid #48bb78;">
+        <strong style="color: #276749;">✅ Approved</strong>
+        <ul style="font-size: 13px; color: #4a5568; margin-top: 6px; padding-left: 16px; line-height: 1.8;">
+          <li>Credit score ≥ 720</li>
+          <li>Debt-to-Income ratio &lt; 30%</li>
+          <li>Loan amount &lt; 2× annual income</li>
+        </ul>
+      </div>
+      <div style="background: #fefcbf; border-radius: 8px; padding: 14px; border-left: 4px solid #ecc94b;">
+        <strong style="color: #b7791f;">🔄 Under Review</strong>
+        <ul style="font-size: 13px; color: #4a5568; margin-top: 6px; padding-left: 16px; line-height: 1.8;">
+          <li>Credit score 600–719</li>
+          <li>Debt-to-Income ratio 30–50%</li>
+          <li>Loan officer review required</li>
+        </ul>
+      </div>
+      <div style="background: #fff5f5; border-radius: 8px; padding: 14px; border-left: 4px solid #fc8181;">
+        <strong style="color: #c53030;">❌ Rejected</strong>
+        <ul style="font-size: 13px; color: #4a5568; margin-top: 6px; padding-left: 16px; line-height: 1.8;">
+          <li>Credit score &lt; 600</li>
+          <li>Debt-to-Income ratio &gt; 50%</li>
+          <li>High risk financial profile</li>
+        </ul>
+      </div>
+      <div style="background: #ebf8ff; border-radius: 8px; padding: 14px; border-left: 4px solid #63b3ed;">
+        <strong style="color: #2b6cb0;">ℹ️ What is DTI Ratio?</strong>
+        <p style="font-size: 13px; color: #4a5568; margin-top: 6px; line-height: 1.6;">DTI = (Existing Debt ÷ Annual Income) × 100. A lower DTI means you have less financial burden and are more likely to repay.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; padding: 20px 0 10px;">
+    <a href="/apply" class="btn btn-primary" style="font-size: 16px; padding: 14px 40px;">Apply for a Loan Now →</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <strong>LoanIQ</strong> — Cloud-Based Loan Approval System &nbsp;|&nbsp;
+  MCA Final Year Project &nbsp;|&nbsp; Chandigarh University &nbsp;|&nbsp; Bharat Sonkusare
+</footer>
+
+</body>
+</html>

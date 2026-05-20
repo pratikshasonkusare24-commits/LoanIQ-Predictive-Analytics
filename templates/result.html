@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Application Result — LoanIQ</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="brand" href="/">Loan<span>IQ</span></a>
+  <a href="/">Home</a>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/apply" class="nav-apply">Apply Now →</a>
+</nav>
+
+<div class="container-sm">
+
+  <!-- Result card -->
+  {% if app.status == 'Approved' %}
+    <div class="result-card result-approved">
+      <div class="result-icon">✅</div>
+      <div class="result-title">Congratulations! Loan Approved</div>
+      <p class="result-note">{{ app.result_note }}</p>
+    </div>
+  {% elif app.status == 'Rejected' %}
+    <div class="result-card result-rejected">
+      <div class="result-icon">❌</div>
+      <div class="result-title">Loan Application Rejected</div>
+      <p class="result-note">{{ app.result_note }}</p>
+    </div>
+  {% else %}
+    <div class="result-card result-review">
+      <div class="result-icon">🔄</div>
+      <div class="result-title">Application Under Review</div>
+      <p class="result-note">{{ app.result_note }}</p>
+    </div>
+  {% endif %}
+
+  <!-- Key numbers -->
+  <div class="info-grid">
+    <div class="info-box">
+      <div class="info-val">#{{ app.id }}</div>
+      <div class="info-lbl">Application ID</div>
+    </div>
+    <div class="info-box">
+      <div class="info-val" style="color: {% if app.dti_ratio < 30 %}#276749{% elif app.dti_ratio < 43 %}#b7791f{% else %}#c53030{% endif %}">
+        {{ app.dti_ratio }}%
+      </div>
+      <div class="info-lbl">DTI Ratio</div>
+    </div>
+    <div class="info-box">
+      <div class="info-val">${{ "{:,.0f}".format(app.loan_amount / app.loan_term) }}</div>
+      <div class="info-lbl">Monthly Payment</div>
+    </div>
+  </div>
+
+  <!-- Application summary -->
+  <div class="card">
+    <h3>Application Summary</h3>
+    <table>
+      <tbody>
+        <tr>
+          <td style="color: #718096; width: 180px; padding: 8px 0; font-size: 14px;">Applicant Name</td>
+          <td style="font-weight: 600; font-size: 14px;">{{ app.full_name }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Credit Score</td>
+          <td style="font-size: 14px; font-weight: 600;
+            color: {% if app.credit_score >= 720 %}#276749{% elif app.credit_score >= 650 %}#b7791f{% else %}#c53030{% endif %}">
+            {{ app.credit_score }}
+            {% if app.credit_score >= 720 %}(Excellent)
+            {% elif app.credit_score >= 680 %}(Good)
+            {% elif app.credit_score >= 640 %}(Fair)
+            {% else %}(Poor){% endif %}
+          </td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Annual Income</td>
+          <td style="font-size: 14px;">${{ "{:,.0f}".format(app.income) }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Existing Debt</td>
+          <td style="font-size: 14px;">${{ "{:,.0f}".format(app.existing_debt) }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Loan Amount</td>
+          <td style="font-size: 14px; font-weight: 600;">${{ "{:,.0f}".format(app.loan_amount) }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Loan Purpose</td>
+          <td style="font-size: 14px; text-transform: capitalize;">{{ app.loan_purpose }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Loan Term</td>
+          <td style="font-size: 14px;">{{ app.loan_term }} months</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Employment</td>
+          <td style="font-size: 14px; text-transform: capitalize;">{{ app.employment }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Applied On</td>
+          <td style="font-size: 14px;">{{ app.applied_at }}</td>
+        </tr>
+        <tr>
+          <td style="color: #718096; padding: 8px 0; font-size: 14px;">Final Status</td>
+          <td>
+            <span class="badge {% if app.status == 'Approved' %}b-approved{% elif app.status == 'Rejected' %}b-rejected{% else %}b-review{% endif %}">
+              {{ app.status }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Tips -->
+  {% if app.status == 'Rejected' %}
+  <div class="card" style="background: #fff5f5; border-color: #fc8181;">
+    <h3 style="color: #c53030;">💡 How to Improve Your Chances</h3>
+    <ul style="font-size: 14px; color: #4a5568; padding-left: 18px; line-height: 2;">
+      <li>Pay off existing debts to reduce your DTI ratio below 30%.</li>
+      <li>Improve your credit score by paying bills on time.</li>
+      <li>Apply for a smaller loan amount relative to your income.</li>
+      <li>Wait 6 months and reapply with an improved financial profile.</li>
+    </ul>
+  </div>
+  {% elif app.status == 'Under Review' %}
+  <div class="card" style="background: #fffaf0; border-color: #f6e05e;">
+    <h3 style="color: #b7791f;">📞 What Happens Next?</h3>
+    <p style="font-size: 14px; color: #4a5568; line-height: 1.8;">
+      A loan officer will review your application within 2–3 business days.
+      You may be contacted to provide additional documents such as salary slips, 
+      bank statements, or identity proof. Keep your phone and email accessible.
+    </p>
+  </div>
+  {% else %}
+  <div class="card" style="background: #f0fff4; border-color: #68d391;">
+    <h3 style="color: #276749;">🎉 Next Steps</h3>
+    <p style="font-size: 14px; color: #4a5568; line-height: 1.8;">
+      Your loan has been approved! A loan officer will contact you within 24 hours 
+      to complete the paperwork and disburse the funds to your account. 
+      Please keep your identity documents ready.
+    </p>
+  </div>
+  {% endif %}
+
+  <!-- Actions -->
+  <div style="display: flex; gap: 12px; margin-top: 8px;">
+    <a href="/apply" class="btn btn-primary" style="flex: 1; text-align: center;">Apply Again</a>
+    <a href="/dashboard" class="btn" style="flex: 1; text-align: center; background: #edf2f7; color: #2d3748; border: 1px solid #e2e8f0;">View Dashboard</a>
+  </div>
+
+</div>
+
+<footer>
+  <strong>LoanIQ</strong> — Cloud-Based Loan Approval System &nbsp;|&nbsp; Bharat Sonkusare
+</footer>
+
+</body>
+</html>

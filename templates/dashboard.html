@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard — LoanIQ</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="brand" href="/">Loan<span>IQ</span></a>
+  <a href="/">Home</a>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/apply" class="nav-apply">Apply Now →</a>
+</nav>
+
+<div class="container">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+    <div>
+      <h2 style="font-size: 24px; font-weight: 700;">Applications Dashboard</h2>
+      <p style="color: #718096; margin-top: 2px; font-size: 14px;">Overview of all submitted loan applications</p>
+    </div>
+    <a href="/apply" class="btn btn-primary">+ New Application</a>
+  </div>
+
+  <!-- Metrics -->
+  <div class="metrics">
+    <div class="metric m-blue">
+      <div class="metric-num">{{ total }}</div>
+      <div class="metric-label">Total Applications</div>
+    </div>
+    <div class="metric m-green">
+      <div class="metric-num">{{ approved }}</div>
+      <div class="metric-label">Approved</div>
+    </div>
+    <div class="metric m-red">
+      <div class="metric-num">{{ rejected }}</div>
+      <div class="metric-label">Rejected</div>
+    </div>
+    <div class="metric m-amber">
+      <div class="metric-num">{{ rate }}%</div>
+      <div class="metric-label">Approval Rate</div>
+    </div>
+  </div>
+
+  <!-- Charts row -->
+  <div class="two-col">
+
+    <!-- Outcome chart -->
+    <div class="card">
+      <h3>Application Outcomes</h3>
+      {% if total > 0 %}
+      <div style="height: 220px; position: relative;">
+        <canvas id="outcomeChart"></canvas>
+      </div>
+      <div style="display: flex; gap: 16px; margin-top: 12px; justify-content: center; flex-wrap: wrap;">
+        <span style="font-size: 13px; color: #4a5568; display: flex; align-items: center; gap: 5px;">
+          <span style="width: 12px; height: 12px; background: #48bb78; border-radius: 3px; display: inline-block;"></span>Approved ({{ approved }})
+        </span>
+        <span style="font-size: 13px; color: #4a5568; display: flex; align-items: center; gap: 5px;">
+          <span style="width: 12px; height: 12px; background: #fc8181; border-radius: 3px; display: inline-block;"></span>Rejected ({{ rejected }})
+        </span>
+        <span style="font-size: 13px; color: #4a5568; display: flex; align-items: center; gap: 5px;">
+          <span style="width: 12px; height: 12px; background: #f6e05e; border-radius: 3px; display: inline-block;"></span>Review ({{ review }})
+        </span>
+      </div>
+      {% else %}
+      <p style="color: #a0aec0; text-align: center; padding: 40px 0; font-size: 14px;">No applications yet. <a href="/apply" style="color: #2b6cb0;">Submit one →</a></p>
+      {% endif %}
+    </div>
+
+    <!-- Stats card -->
+    <div class="card">
+      <h3>Key Statistics</h3>
+      <div style="display: flex; flex-direction: column; gap: 16px; padding-top: 8px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f7fafc; border-radius: 8px;">
+          <span style="font-size: 14px; color: #4a5568;">Avg. Credit Score</span>
+          <span style="font-size: 18px; font-weight: 700; color: #2b6cb0;">{{ avg_credit }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f7fafc; border-radius: 8px;">
+          <span style="font-size: 14px; color: #4a5568;">Avg. DTI Ratio</span>
+          <span style="font-size: 18px; font-weight: 700; color: {% if avg_dti < 30 %}#276749{% elif avg_dti < 43 %}#b7791f{% else %}#c53030{% endif %}">{{ avg_dti }}%</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f7fafc; border-radius: 8px;">
+          <span style="font-size: 14px; color: #4a5568;">Under Review</span>
+          <span style="font-size: 18px; font-weight: 700; color: #b7791f;">{{ review }}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f7fafc; border-radius: 8px;">
+          <span style="font-size: 14px; color: #4a5568;">Approval Rate</span>
+          <span style="font-size: 18px; font-weight: 700; color: #276749;">{{ rate }}%</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Loan purpose breakdown -->
+  {% if purposes %}
+  <div class="card">
+    <h3>Applications by Loan Purpose</h3>
+    <div class="bar-chart">
+      {% for p in purposes %}
+      <div class="bar-row">
+        <div class="bar-lbl" style="text-transform: capitalize;">{{ p.loan_purpose or 'Other' }}</div>
+        <div class="bar-track">
+          <div class="bar-fill" style="width: {{ (p.total / total * 100)|round|int }}%;"></div>
+        </div>
+        <div class="bar-val">{{ p.total }}</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Applications table -->
+  <div class="card" style="padding: 0; overflow: hidden;">
+    <div style="padding: 16px 20px 12px; border-bottom: 1px solid #f7fafc; display: flex; justify-content: space-between; align-items: center;">
+      <strong style="font-size: 15px;">All Applications</strong>
+      <span style="font-size: 13px; color: #718096;">{{ total }} total</span>
+    </div>
+    {% if apps %}
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Applicant</th>
+            <th>Loan Amount</th>
+            <th>Credit Score</th>
+            <th>DTI</th>
+            <th>Purpose</th>
+            <th>Status</th>
+            <th>Applied On</th>
+            <th>Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in apps %}
+          <tr>
+            <td style="color: #a0aec0; font-size: 12px;">{{ a.id }}</td>
+            <td style="font-weight: 500;">{{ a.full_name }}</td>
+            <td>${{ "{:,.0f}".format(a.loan_amount) }}</td>
+            <td style="font-weight: 600; color: {% if a.credit_score >= 720 %}#276749{% elif a.credit_score >= 650 %}#b7791f{% else %}#c53030{% endif %}">
+              {{ a.credit_score }}
+            </td>
+            <td style="color: {% if a.dti_ratio < 30 %}#276749{% elif a.dti_ratio < 43 %}#b7791f{% else %}#c53030{% endif %}">
+              {{ a.dti_ratio }}%
+            </td>
+            <td style="text-transform: capitalize;">{{ a.loan_purpose }}</td>
+            <td>
+              <span class="badge {% if a.status == 'Approved' %}b-approved{% elif a.status == 'Rejected' %}b-rejected{% elif a.status == 'Under Review' %}b-review{% else %}b-pending{% endif %}">
+                {{ a.status }}
+              </span>
+            </td>
+            <td style="font-size: 12px; color: #718096;">{{ a.applied_at[:10] }}</td>
+            <td><a href="/application/{{ a.id }}">View →</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 50px; color: #a0aec0;">
+      <p style="font-size: 16px; margin-bottom: 12px;">No applications yet.</p>
+      <a href="/apply" class="btn btn-primary">Submit First Application →</a>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+<footer>
+  <strong>LoanIQ</strong> — Cloud-Based Loan Approval System &nbsp;|&nbsp; Bharat Sonkusare
+</footer>
+
+{% if total > 0 %}
+<script>
+new Chart(document.getElementById('outcomeChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Approved', 'Rejected', 'Under Review'],
+    datasets: [{
+      data: [{{ approved }}, {{ rejected }}, {{ review }}],
+      backgroundColor: ['#48bb78', '#fc8181', '#f6e05e'],
+      borderWidth: 0,
+      hoverOffset: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: { legend: { display: false } }
+  }
+});
+</script>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Apply for a Loan — LoanIQ</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a class="brand" href="/">Loan<span>IQ</span></a>
+  <a href="/">Home</a>
+  <a href="/dashboard">Dashboard</a>
+  <a href="/apply" class="nav-apply">Apply Now →</a>
+</nav>
+
+<div class="container-sm">
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size: 26px; font-weight: 700;">Loan Application Form</h2>
+    <p style="color: #718096; margin-top: 4px;">Fill in all details below. Fields marked * are required.</p>
+  </div>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'error' if category == 'error' else 'success' }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form method="POST" action="/apply">
+
+    <!-- Personal Details -->
+    <div class="card">
+      <h3>👤 Personal Details</h3>
+      <div class="form-grid">
+        <div class="form-group full">
+          <label>Full Name *</label>
+          <input type="text" name="full_name" placeholder="e.g. Aisha Mensah" required/>
+        </div>
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" name="age" placeholder="30" min="18" max="85"/>
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" name="email" placeholder="your@email.com"/>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="text" name="phone" placeholder="+91 9876543210"/>
+        </div>
+        <div class="form-group">
+          <label>Employment Type</label>
+          <select name="employment">
+            <option value="salaried">Salaried</option>
+            <option value="business">Business Owner</option>
+            <option value="self-employed">Self-Employed</option>
+            <option value="retired">Retired</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Financial Details -->
+    <div class="card">
+      <h3>💰 Financial Details</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Annual Income ($) *</label>
+          <input type="number" name="income" placeholder="75000" min="1000" required/>
+        </div>
+        <div class="form-group">
+          <label>Existing Debt ($)</label>
+          <input type="number" name="existing_debt" placeholder="0" min="0"/>
+        </div>
+        <div class="form-group full">
+          <label>Credit Score (300–850) *</label>
+          <input type="number" name="credit_score" placeholder="700" min="300" max="850" required/>
+          <small style="color: #718096; font-size: 12px;">Your credit score is available from your bank or credit bureau. 720+ is excellent.</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan Details -->
+    <div class="card">
+      <h3>🏦 Loan Details</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Loan Amount ($) *</label>
+          <input type="number" name="loan_amount" placeholder="50000" min="500" required/>
+        </div>
+        <div class="form-group">
+          <label>Loan Purpose</label>
+          <select name="loan_purpose">
+            <option value="home">Home Purchase</option>
+            <option value="vehicle">Vehicle</option>
+            <option value="business">Business</option>
+            <option value="education">Education</option>
+            <option value="personal">Personal</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Loan Term (months)</label>
+          <select name="loan_term">
+            <option value="12">12 months (1 year)</option>
+            <option value="24">24 months (2 years)</option>
+            <option value="36" selected>36 months (3 years)</option>
+            <option value="48">48 months (4 years)</option>
+            <option value="60">60 months (5 years)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terms -->
+    <div class="card">
+      <div style="display: flex; gap: 10px; align-items: flex-start;">
+        <input type="checkbox" id="terms" required style="margin-top: 3px; width: auto;"/>
+        <label for="terms" style="font-size: 14px; color: #4a5568;">
+          I confirm that all the information provided above is accurate and complete. I understand that providing false information may result in rejection of my application.
+        </label>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block" style="font-size: 16px; padding: 14px;">
+      Submit Application →
+    </button>
+
+  </form>
+</div>
+
+<footer>
+  <strong>LoanIQ</strong> — Cloud-Based Loan Approval System &nbsp;|&nbsp; Bharat Sonkusare
+</footer>
+
+</body>
+</html>
